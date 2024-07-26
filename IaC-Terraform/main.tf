@@ -98,16 +98,21 @@ resource "helm_release" "nginx-ingress" {
 
   set {
     name  = "controller.service.loadBalancerIP"
-    value = "35.198.97.209"
+    value = "35.246.192.213"
   }
   set {
     name  = "controller.hostPort.enabled"
     value = "true"
   }
+  set {
+    name  = "controller.admissionWebhooks.enabled"
+    value = "false"
+  }
 
 }
 
 resource "kubernetes_ingress_v1" "aptos-ingress" {
+  depends_on = [helm_release.nginx-ingress]
   metadata {
     name = "aptos-ingress"
     annotations = {
