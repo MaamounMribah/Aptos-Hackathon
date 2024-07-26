@@ -1,22 +1,11 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-alpine AS build
-
-# Set the working directory in the container
+# stage 1
+FROM node:latest as node
 WORKDIR /app
-
-# Copy package.json and package-lock.json to the working directory
 COPY . .
-
-# Install the dependencies
 RUN npm install
-COPY . .
-RUN npm run build
-# Copy the rest of the application files to the working directory
+RUN npm run build --prod
 
 
-# Expose port 4200
-EXPOSE 4200
-
-# Serve the application
-CMD ["npm", "start"]
-
+# stage 2
+FROM nginx:alpine
+COPY --from=node /app/dist/angular-app /usr/share/nginx/html
