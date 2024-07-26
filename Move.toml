@@ -1,0 +1,15 @@
+[package]
+name = "identity"
+version = "1.0.0"
+authors = []
+[addresses]
+address = "0x8bc9b1151bcdbbc1f2a58d12103e35f89c14889827a346555d284f2c4107c2f6"
+
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "devnet"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dev-dependencies]
