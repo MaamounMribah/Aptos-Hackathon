@@ -40,3 +40,18 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+
+# Iac files 
+IaC-Terraform/.terraform/providers/registry.terraform.io
+IaC-Terraform/.terraform.lock.hcl
+
+IaC-Terraform/terraform.tfstate
+IaC-Terraform/terraform.tfstate.backup
+IaC-Terraform/tfplan
+IaC-Terraform/tfplan.json
+IaC-Terraform/terraform*
+IaC-Terraform/terraform.*
+IaC-Terraform/.terraform*
+IaC-Terraform/.terraform/
+IaC-Terraform/.terraform.*
