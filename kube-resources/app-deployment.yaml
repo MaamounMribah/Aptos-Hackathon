@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aptos-app-deployment
+  labels:
+    app: aptos-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aptos-app
+  template:
+    metadata:
+      labels:
+        app: aptos-app
+    spec:
+      containers:
+      - name: aptos-app
+        image: maamounm/aptos:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4200
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "1m"
+          limits:
+            memory: "4096Mi"
+            cpu: "4m"
+        
