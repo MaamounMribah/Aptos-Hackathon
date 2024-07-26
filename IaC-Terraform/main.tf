@@ -33,6 +33,58 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 }
 
+resource "helm_release" "cert-manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  chart      = "cert-manager"
+  namespace =  "default"
+  create_namespace = true
+  timeout = 1000
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+
+
+}
+resource "kubernetes_manifest" "letsencrypt-issuer" {
+  # depends_on = [ helm_release.cert-manager ]
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name = "letsencrypt-issuer"
+    }
+    spec = {
+      acme = {
+        server                 = "https://acme-v02.api.letsencrypt.org/directory"
+        email                  = "m.mribah@instadeep.com"
+        privateKeySecretRef = {
+          name = "letsencrypt"
+        }
+        solvers = [{
+          dns01 = {
+            cloudflare = {
+              email = "m.mribah@eniso.u-sousse.tn"
+              apiKeySecretRef = {
+                name = "cloudflare-api-key-secret"
+                key = "api-key"
+              }
+            }
+          }
+          selector = {
+            dnsNames = [
+              "*.int-infra.com",
+              "int-infra"
+            ]
+          }
+        }]
+      }
+    }
+  }
+}
+
 
 ### providing nginx ingress controller ###
 resource "helm_release" "nginx-ingress" {
@@ -46,7 +98,7 @@ resource "helm_release" "nginx-ingress" {
 
   set {
     name  = "controller.service.loadBalancerIP"
-    value = 35.198.97.209
+    value = "35.198.97.209"
   }
   set {
     name  = "controller.hostPort.enabled"
@@ -55,9 +107,9 @@ resource "helm_release" "nginx-ingress" {
 
 }
 
-resource "kubernetes_ingress_v1" "express-ingress" {
+resource "kubernetes_ingress_v1" "aptos-ingress" {
   metadata {
-    name = "express-ingress"
+    name = "aptos-ingress"
     annotations = {
       "cert-manager.io/cluster-issuer"          = "letsencrypt-issuer"
       "nginx.ingress.kubernetes.io/enable-cors"= "true"
