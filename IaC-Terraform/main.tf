@@ -49,7 +49,7 @@ resource "helm_release" "cert-manager" {
 
 }
 resource "kubernetes_manifest" "letsencrypt-issuer" {
-  # depends_on = [ helm_release.cert-manager ]
+  depends_on = [ helm_release.cert-manager ]
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
@@ -66,7 +66,7 @@ resource "kubernetes_manifest" "letsencrypt-issuer" {
         solvers = [{
           dns01 = {
             cloudflare = {
-              email = "m.mribah@eniso.u-sousse.tn"
+              email = "maamoun.mribah@eniso.u-sousse.tn"
               apiKeySecretRef = {
                 name = "cloudflare-api-key-secret"
                 key = "api-key"
