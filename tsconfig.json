@@ -2,6 +2,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "target": "es2020", // or any other target you prefer
+    "module": "esnext", // or commonjs
+    "allowSyntheticDefaultImports": true, // Add this line
+
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
