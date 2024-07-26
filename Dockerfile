@@ -9,6 +9,7 @@ COPY . .
 
 # Install the dependencies
 RUN npm install
+COPY . .
 RUN npm run build
 # Copy the rest of the application files to the working directory
 
