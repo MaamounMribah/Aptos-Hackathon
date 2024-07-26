@@ -9,7 +9,7 @@ COPY . .
 
 # Install the dependencies
 RUN npm install
-
+RUN npm run build
 # Copy the rest of the application files to the working directory
 
 
@@ -17,5 +17,5 @@ RUN npm install
 EXPOSE 4200
 
 # Serve the application
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]
 
