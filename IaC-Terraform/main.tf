@@ -34,3 +34,56 @@ resource "azurerm_kubernetes_cluster" "aks" {
 }
 
 
+### providing nginx ingress controller ###
+resource "helm_release" "nginx-ingress" {
+  name       = "nginx-ingress"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  timeout = 1000
+  recreate_pods = true
+  dependency_update = true
+  cleanup_on_fail = true
+
+  set {
+    name  = "controller.service.loadBalancerIP"
+    value = 35.198.97.209
+  }
+  set {
+    name  = "controller.hostPort.enabled"
+    value = "true"
+  }
+
+}
+
+resource "kubernetes_ingress_v1" "express-ingress" {
+  metadata {
+    name = "express-ingress"
+    annotations = {
+      "cert-manager.io/cluster-issuer"          = "letsencrypt-issuer"
+      "nginx.ingress.kubernetes.io/enable-cors"= "true"
+      "nginx.ingress.kubernetes.io/cors-allow-origin"= "*"
+    }
+  }
+
+  spec {
+    ingress_class_name = "nginx"
+
+    rule {
+      host = "aptos-ai-sec.int-infra.com"
+      http {
+        path {
+          path = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "aptos-app-service"
+              port {
+                number = 91
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
