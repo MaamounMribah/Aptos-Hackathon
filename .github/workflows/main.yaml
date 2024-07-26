@@ -1,4 +1,4 @@
-name : Automate build, test, deploy of the app ...
+name : Automate build, test, deploy of the app 
 
 on:
   push:
